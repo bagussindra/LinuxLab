@@ -1,13 +1,20 @@
 import json
 import socket
-import subprocess
 
 from textual.widgets import Static
-
+from services.ssh_service import SSHService
 
 class SSHView(Static):
 
     selected = 0
+
+    def __init__(self):
+
+        super().__init__()
+
+        self.selected = 0
+
+        self.ssh = SSHService()
 
     def on_mount(self):
         self.set_interval(2, self.refresh_servers)
@@ -86,9 +93,60 @@ class SSHView(Static):
 
         server = self.current_server()
 
-        subprocess.call([
-            "ssh",
-            "-p",
-            str(server["port"]),
-            f"{server['user']}@{server['host']}"
-        ])
+        try:
+
+            self.ssh.connect(server)
+
+            info = self.ssh.get_system_info()
+
+            text = "🔐 SSH Manager\n\n"
+
+            text += "🟢 Connected\n\n"
+
+            text += f"Server   : {server['name']}\n"
+            text += f"Host     : {server['host']}\n"
+            text += f"User     : {server['user']}\n\n"
+
+            text += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+            text += f"Hostname : {info['hostname']}\n"
+            text += f"Kernel   : {info['kernel']}\n"
+            text += f"Uptime   : {info['uptime']}\n"
+            text += f"Load Avg : {' '.join(info['load'])}\n\n"
+
+            text += "Memory\n"
+            text += info["memory"]
+            text += "\n"
+
+            text += "Disk\n"
+            text += info["disk"]
+
+            self.update(text)
+
+        except Exception as e:
+
+            self.update(
+                f"❌ Connection Failed\n\n{e}"
+            )
+
+    def handle_key(self, event):
+
+        if event.key == "up":
+
+            self.move_up()
+
+            return True
+
+        elif event.key == "down":
+
+            self.move_down()
+
+            return True
+
+        elif event.key == "enter":
+
+            self.connect()
+
+            return True
+
+        return False

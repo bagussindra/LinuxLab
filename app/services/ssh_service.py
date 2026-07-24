@@ -1,5 +1,4 @@
-from app.core.ssh_client import SSHClient
-
+from core.ssh_client import SSHClient
 
 class SSHService:
 
