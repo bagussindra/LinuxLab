@@ -15,21 +15,28 @@ def main():
 
     ssh.connect(server)
 
-    print("Connected")
+    print("Connected\n")
 
-    print()
+    info = ssh.get_system_info()
 
-    print(
-        ssh.execute("hostname")
-    )
+    print("=" * 40)
+    print("SERVER INFORMATION")
+    print("=" * 40)
 
-    print(
-        ssh.execute("uptime")
-    )
+    print(f"Hostname : {info['hostname']}")
+    print(f"Kernel   : {info['kernel']}")
+    print(f"Uptime   : {info['uptime']}")
+    print(f"Load Avg : {' '.join(info['load'])}")
+
+    print("\n========== MEMORY ==========\n")
+    print(info["memory"])
+
+    print("\n========== DISK ==========\n")
+    print(info["disk"])
 
     ssh.disconnect()
 
-    print("Disconnected")
+    print("\nDisconnected")
 
 
 if __name__ == "__main__":

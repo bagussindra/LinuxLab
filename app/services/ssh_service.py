@@ -27,6 +27,17 @@ class SSHService:
 
         return self.client.execute(command)
 
+    def get_system_info(self):
+
+        return {
+            "hostname": self.execute("hostname").strip(),
+            "kernel": self.execute("uname -r").strip(),
+            "uptime": self.execute("uptime -p").strip(),
+            "load": self.execute("cat /proc/loadavg").split()[:3],
+            "memory": self.execute("free -h"),
+            "disk": self.execute("df -h /"),
+        }
+
     def disconnect(self):
 
         if self.connected:
