@@ -180,6 +180,12 @@ class LinuxLab(App):
         self.dashboard.show_view("Dashboard")
 
     def on_key(self, event):
+        print("KEY =", event.key)
+        view = self.dashboard.current_view
+
+        if hasattr(view, "handle_key"):
+            if view.handle_key(event):
+                return
 
         if event.key == "down":
 

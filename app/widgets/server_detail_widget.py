@@ -3,16 +3,28 @@ from textual.widgets import Static
 
 class ServerDetailWidget(Static):
 
-    def show_server(self, server):
+    def show_info(self, info):
 
         text = "[bold green]Server Detail[/bold green]\n\n"
 
-        text += f"Name : {server['name']}\n"
+        text += f"Hostname : {info['hostname']}\n"
+        text += f"Kernel   : {info['kernel']}\n"
+        text += f"Uptime   : {info['uptime']}\n\n"
 
-        text += f"Host : {server['host']}\n"
+        text += "Load Average\n"
 
-        text += f"User : {server['user']}\n"
+        text += (
+            f"{info['load'][0]}  "
+            f"{info['load'][1]}  "
+            f"{info['load'][2]}\n\n"
+        )
 
-        text += f"Port : {server['port']}\n"
+        text += "Memory\n"
+
+        text += info["memory"]
+
+        text += "\nDisk\n"
+
+        text += info["disk"]
 
         self.update(text)
