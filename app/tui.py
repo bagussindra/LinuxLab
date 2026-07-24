@@ -150,6 +150,18 @@ class LinuxLab(App):
         padding: 1;
         height: 7;
     }
+    ServerListWidget {
+        width: 30;
+        border: round cyan;
+        padding: 1;
+    }
+
+    ServerDetailWidget {
+        border: round green;
+        padding: 1;
+    }
+
+
     """
 
     def compose(self) -> ComposeResult:
