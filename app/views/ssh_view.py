@@ -59,11 +59,55 @@ class SSHView(Static):
 
             self.update(
                 f"""
-[bold green]Connected[/bold green]
+[bold cyan]SSH Manager[/bold cyan]
+
+[bold green]● Connected[/bold green]
 
 Hostname : {info["hostname"]}
+OS       : {info["os"]}
 Kernel   : {info["kernel"]}
+CPU      : {info["cpu"]}
+Memory   : {info["memory"]}
+Disk     : {info["disk"]}
+IP       : {info["ip"]}
+Load     : {info["load"]}
 Uptime   : {info["uptime"]}
+"""
+            )
+        except Exception as e:
+
+            self.update(
+                f"""
+[bold red]Connection Failed[/bold red]
+
+{e}
+"""
+            )
+    def refresh_info(self):
+
+        try:
+
+            server = self.current
+
+            info = self.controller.connect(server)
+
+            self.update(
+                f"""
+[bold cyan]SSH Manager[/bold cyan]
+
+[bold green]● Connected[/bold green]
+
+Hostname : {info["hostname"]}
+OS       : {info["os"]}
+Kernel   : {info["kernel"]}
+CPU      : {info["cpu"]}
+Memory   : {info["memory"]}
+Disk     : {info["disk"]}
+IP       : {info["ip"]}
+Load     : {info["load"]}
+Uptime   : {info["uptime"]}
+
+[dim]Press R to refresh[/dim]
 """
             )
 
@@ -71,7 +115,7 @@ Uptime   : {info["uptime"]}
 
             self.update(
                 f"""
-[bold red]Connection Failed[/bold red]
+[bold red]Refresh Failed[/bold red]
 
 {e}
 """

@@ -34,6 +34,7 @@ class MainScreen(Screen):
         Binding("left", "left", "Back"),
         Binding("right", "right", "Open"),
         Binding("enter", "select", "Select"),
+        Binding("r", "refresh", "Refresh"),
     ]
 
     focus = "sidebar"
@@ -107,6 +108,17 @@ class MainScreen(Screen):
             ssh = self.view.query_one(SSHView)
 
             ssh.connect()
+
+    def action_refresh(self):
+
+        if self.focus != "ssh":
+            return
+
+        from views.ssh_view import SSHView
+
+        ssh = self.view.query_one(SSHView)
+
+        ssh.refresh_info()
 
     def refresh_content(self):
 
