@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
-from textual.containers import Vertical
 from textual.widgets import Static
+from textual.containers import Vertical, Horizontal
 
 from controllers.ssh_controller import SSHController
 
@@ -48,7 +48,6 @@ Press ENTER to connect.
 
     def compose(self) -> ComposeResult:
 
-        with Vertical():
 
             self.system = SystemWidget()
 
@@ -56,6 +55,11 @@ Press ENTER to connect.
 
             self.network = NetworkWidget()
 
-            yield self.system
-            yield self.resource
-            yield self.network
+            with Vertical():
+
+                with Horizontal():
+
+                    yield self.system
+                    yield self.resource
+
+                yield self.network

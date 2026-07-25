@@ -52,7 +52,10 @@ class SSHService:
             "kernel": self.execute("uname -r").strip(),
 
             "cpu": self.execute(
-                "lscpu | grep 'Model name' | cut -d: -f2"
+                "lscpu | awk -F: '/Model name/ {print $2}' | sed 's/@.*//' | xargs"
+            ).strip(),
+            "cpu_usage": self.execute(
+                "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'"
             ).strip(),
 
             "uptime": self.execute("uptime -p").strip(),
@@ -64,9 +67,15 @@ class SSHService:
             "memory": self.execute(
                 "free -h | awk '/Mem:/ {print $3 \" / \" $2}'"
             ).strip(),
+            "memory_usage": self.execute(
+                "free | awk '/Mem:/ {print int($3/$2*100)}'"
+            ).strip(),
 
             "disk": self.execute(
                 "df -h / | awk 'NR==2 {print $3 \" / \" $2}'"
+            ).strip(),
+            "disk_usage": self.execute(
+                "df / | awk 'NR==2 {gsub(/%/, \"\", $5); print $5}'"
             ).strip(),
 
             "ip": self.execute(

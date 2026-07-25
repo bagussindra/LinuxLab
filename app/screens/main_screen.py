@@ -13,7 +13,7 @@ class MainScreen(Screen):
 
     CSS = """
     Horizontal {
-        height: 1fr;
+        height: auto;
     }
 
     #sidebar {
@@ -24,6 +24,24 @@ class MainScreen(Screen):
 
     #content {
         border: round green;
+        padding: 1;
+    }
+
+    SystemWidget,
+    ResourceWidget {
+         width: 1fr;
+
+    }
+
+    NetworkWidget {
+        width: 100%;
+    }
+
+    SystemWidget,
+    ResourceWidget,
+    NetworkWidget {
+        border: round cyan;
+        margin-bottom: 1;
         padding: 1;
     }
     """
