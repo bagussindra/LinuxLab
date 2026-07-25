@@ -35,6 +35,7 @@ class MainScreen(Screen):
         Binding("right", "right", "Open"),
         Binding("enter", "select", "Select"),
         Binding("r", "refresh", "Refresh"),
+        Binding("escape", "disconnect", "Disconnect"),
     ]
 
     focus = "sidebar"
@@ -72,6 +73,14 @@ class MainScreen(Screen):
 
             ssh.cursor_up()
 
+        elif self.focus == "settings":
+
+            from views.settings_view import SettingsView
+
+            settings = self.view.query_one(SettingsView)
+
+            settings.cursor_up()
+
     def action_down(self):
 
         if self.focus == "sidebar":
@@ -89,6 +98,14 @@ class MainScreen(Screen):
             ssh = self.view.query_one(SSHView)
 
             ssh.cursor_down()
+
+        elif self.focus == "settings":
+
+            from views.settings_view import SettingsView
+
+            settings = self.view.query_one(SettingsView)
+
+            settings.cursor_down()
 
     def action_select(self):
 
@@ -108,6 +125,20 @@ class MainScreen(Screen):
             ssh = self.view.query_one(SSHView)
 
             ssh.connect()
+
+        elif self.focus == "settings":
+
+            from views.settings_view import SettingsView
+
+            settings = self.view.query_one(SettingsView)
+
+            if settings.mode == "menu":
+
+                settings.open()
+
+            else:
+                settings.select_option()
+
 
     def action_refresh(self):
 
@@ -148,6 +179,18 @@ class MainScreen(Screen):
             ssh.focus()
             print("Focus -> SSH")
 
+        elif menu == "Settings":
+
+            self.focus = "settings"
+
+            from views.settings_view import SettingsView
+
+            settings = self.view.query_one(SettingsView)
+
+            settings.focus()
+
+            print("Focus -> Settings")
+
     def action_left(self):
 
         self.focus = "sidebar"
@@ -156,3 +199,16 @@ class MainScreen(Screen):
 
         sidebar.focus()
         print("Focus -> Sidebar")
+
+    def action_disconnect(self):
+
+        if self.focus != "ssh":
+            return
+
+        from views.ssh_view import SSHView
+
+        ssh = self.view.query_one(SSHView)
+
+        ssh.disconnect()
+
+        self.focus = "sidebar"

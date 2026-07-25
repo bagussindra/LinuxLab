@@ -9,6 +9,14 @@ class SSHController:
 
     def connect(self, server):
 
-        self.service.connect(server)
+        if (
+            not self.service.connected
+            or self.service.server != server
+        ):
+            self.service.connect(server)
 
         return self.service.get_system_info()
+
+    def disconnect(self):
+
+        self.service.disconnect()

@@ -3,6 +3,7 @@ from textual.widgets import Static
 
 from config.servers import SERVERS
 from controllers.ssh_controller import SSHController
+from controllers.settings_controller import SettingsController
 
 class SSHView(Static):
 
@@ -48,6 +49,7 @@ class SSHView(Static):
         super().__init__()
 
         self.controller = SSHController()
+        self.settings = SettingsController()
 
     def connect(self):
 
@@ -107,7 +109,7 @@ IP       : {info["ip"]}
 Load     : {info["load"]}
 Uptime   : {info["uptime"]}
 
-[dim]Press R to refresh[/dim]
+{self.footer_text()}
 """
             )
 
@@ -120,3 +122,18 @@ Uptime   : {info["uptime"]}
 {e}
 """
             )
+
+    def disconnect(self):
+
+        self.controller.disconnect()
+
+        self.render_servers()
+
+    def footer_text(self):
+
+        interval = self.settings.get("refresh_interval")
+
+        if interval == 0:
+            return "[dim]Refresh : Manual (R)[/dim]"
+
+        return f"[dim]Auto Refresh : {interval}s[/dim]"
