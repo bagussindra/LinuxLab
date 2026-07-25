@@ -6,6 +6,12 @@ class DockerView(Static):
     def on_mount(self):
 
         self.update(
-            "[bold cyan]Docker[/bold cyan]\n\n"
-            "Docker page"
+"""🐳 Docker
+
+Coming Soon...
+
+- Container
+- Image
+- Volume
+"""
         )

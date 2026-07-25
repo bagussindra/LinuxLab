@@ -1,0 +1,95 @@
+from textual.app import ComposeResult
+from textual.containers import Horizontal
+from textual.screen import Screen
+from textual.widgets import Header, Footer, Static
+from textual.binding import Binding
+from widgets.content import Content
+
+
+from widgets.sidebar import Sidebar
+
+
+class MainScreen(Screen):
+
+    CSS = """
+    Horizontal {
+        height: 1fr;
+    }
+
+    #sidebar {
+        width: 30;
+        border: round cyan;
+        padding: 1;
+    }
+
+    #content {
+        border: round green;
+        padding: 1;
+    }
+    """
+
+    BINDINGS = [
+        Binding("up", "up", "Up"),
+        Binding("down", "down", "Down"),
+    ]
+
+
+    def compose(self) -> ComposeResult:
+
+        yield Header(show_clock=True)
+
+        with Horizontal():
+
+            yield Sidebar(id="sidebar")
+
+            self.content = Content(id="content")
+
+            yield self.content
+
+
+        yield Footer()
+
+    def action_up(self):
+
+        sidebar = self.query_one(Sidebar)
+
+        sidebar.cursor_up()
+
+        self.refresh_content()
+
+
+    def action_down(self):
+
+        sidebar = self.query_one(Sidebar)
+
+        sidebar.cursor_down()
+
+        self.refresh_content()
+
+    def refresh_content(self):
+
+        menu = self.query_one(Sidebar).current
+
+        if menu == "Dashboard":
+            self.content.show_dashboard()
+
+        elif menu == "Monitoring":
+            self.content.show_monitoring()
+
+        elif menu == "Network":
+            self.content.show_network()
+
+        elif menu == "SSH Manager":
+            self.content.show_ssh()
+
+        elif menu == "Docker":
+            self.content.show_docker()
+
+        elif menu == "Settings":
+            self.content.show_settings()
+
+    def on_mount(self):
+
+        self.content = self.query_one(Content)
+
+        self.refresh_content()

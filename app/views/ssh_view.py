@@ -1,82 +1,78 @@
-from textual.app import ComposeResult
-from textual.containers import Horizontal
+from textual.reactive import reactive
 from textual.widgets import Static
 
-from widgets.server_list_widget import ServerListWidget
-from widgets.server_detail_widget import ServerDetailWidget
-from services.ssh_service import SSHService
+from config.servers import SERVERS
+from controllers.ssh_controller import SSHController
 
 class SSHView(Static):
+
+    selected = reactive(0)
+
+    def on_mount(self):
+        self.render_servers()
+
+    def render_servers(self):
+
+        text = "[bold cyan]SSH Manager[/bold cyan]\n\n"
+
+        text += "[bold]Servers[/bold]\n\n"
+
+        for i, server in enumerate(SERVERS):
+
+            if i == self.selected:
+                text += f"▶ {server['name']}\n"
+            else:
+                text += f"  {server['name']}\n"
+
+        text += "\nPress ENTER to connect."
+
+        self.update(text)
+
+    def cursor_up(self):
+
+        self.selected = (self.selected - 1) % len(SERVERS)
+
+        self.render_servers()
+
+    def cursor_down(self):
+
+        self.selected = (self.selected + 1) % len(SERVERS)
+
+        self.render_servers()
+
+    @property
+    def current(self):
+        return SERVERS[self.selected]
 
     def __init__(self):
         super().__init__()
 
-        self.service = SSHService()
-
-    def compose(self) -> ComposeResult:
-
-        self.server_list = ServerListWidget()
-        self.server_detail = ServerDetailWidget()
-
-        with Horizontal():
-
-            yield self.server_list
-
-            yield self.server_detail
-
-    def on_mount(self):
-
-        server = self.server_list.current()
-
-        self.server_detail.update(
-            f"Selected : {server['name']}\n\nPress ENTER to connect."
-        )
-
-    def move_up(self):
-
-        self.server_list.move_up()
-
-        server = self.server_list.current()
-
-        self.server_detail.update(
-            f"Selected : {server['name']}\n\nPress ENTER to connect."
-        )
-
-    def move_down(self):
-
-        self.server_list.move_down()
-
-        server = self.server_list.current()
-
-        self.server_detail.update(
-            f"Selected : {server['name']}\n\nPress ENTER to connect."
-        )
+        self.controller = SSHController()
 
     def connect(self):
 
-        server = self.server_list.current()
+        server = self.current
 
-        self.service.connect(server)
+        try:
 
-        info = self.service.get_system_info()
+            info = self.controller.connect(server)
 
-        self.server_detail.show_info(info)
+            self.update(
+                f"""
+[bold green]Connected[/bold green]
 
-    def handle_key(self, event):
+Hostname : {info["hostname"]}
+Kernel   : {info["kernel"]}
+Uptime   : {info["uptime"]}
+"""
+            )
 
-        if event.key == "up":
+        except Exception as e:
 
-            self.move_up()
-            return True
+            self.update(
+                f"""
+[bold red]Connection Failed[/bold red]
 
-        elif event.key == "down":
-
-            self.move_down()
-            return True
-
-        elif event.key == "enter":
-
-            self.connect()
-            return True
-
-        return False
+{e}
+"""
+            )

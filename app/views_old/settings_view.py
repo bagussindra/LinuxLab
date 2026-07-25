@@ -6,6 +6,12 @@ class SettingsView(Static):
     def on_mount(self):
 
         self.update(
-            "[bold cyan]Settings[/bold cyan]\n\n"
-            "Settings page"
+"""⚙ Settings
+
+Coming Soon...
+
+- Theme
+- Config
+- About
+"""
         )

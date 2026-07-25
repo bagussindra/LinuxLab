@@ -1,0 +1,16 @@
+SERVERS = [
+    {
+        "name": "Production",
+        "host": "103.179.66.63",
+        "user": "root",
+        "password": "Gaspol@12345",
+        "port": 22,
+    },
+    {
+        "name": "MikroTik Lab",
+        "host": "192.168.88.1",
+        "user": "admin",
+        "password": "",
+        "port": 22,
+    },
+]
