@@ -2,10 +2,23 @@ from core.ssh_client import SSHClient
 
 class SSHService:
 
+    _instance = None
+
+
+    def __new__(cls):
+
+        if cls._instance is None:
+
+            cls._instance = super().__new__(cls)
+
+            cls._instance.client = SSHClient()
+            cls._instance.connected = False
+            cls._instance.server = None
+
+        return cls._instance
+
     def __init__(self):
-        self.client = SSHClient()
-        self.connected = False
-        self.server = None
+        pass
 
     def connect(self, server):
 

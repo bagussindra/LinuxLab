@@ -20,3 +20,6 @@ class SSHController:
     def disconnect(self):
 
         self.service.disconnect()
+
+    def system_info(self):
+        return self.service.get_system_info()
