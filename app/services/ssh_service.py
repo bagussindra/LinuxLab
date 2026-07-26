@@ -52,8 +52,9 @@ class SSHService:
             "kernel": self.execute("uname -r").strip(),
 
             "cpu": self.execute(
-                "lscpu | awk -F: '/Model name/ {print $2}' | sed 's/@.*//' | xargs"
+                "lscpu | awk -F: '/Model name/ {print $2}' | sed 's/@.*//' | sed 's/Processor//' | sed 's/pc-i440fx.*//' | xargs"
             ).strip(),
+
             "cpu_usage": self.execute(
                 "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'"
             ).strip(),

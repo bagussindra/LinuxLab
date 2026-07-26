@@ -6,10 +6,21 @@ class ResourceWidget(Static):
     def bar(self, percent: int):
 
         total = 20
-
         filled = int(total * percent / 100)
 
-        return "█" * filled + "░" * (total - filled)
+        if percent < 60:
+            color = "green"
+        elif percent < 80:
+            color = "yellow"
+        else:
+            color = "red"
+
+        return (
+            f"[{color}]"
+            + ("█" * filled)
+            + f"[/{color}]"
+            + ("░" * (total - filled))
+        )
 
     def update_info(self, info):
 
@@ -21,19 +32,19 @@ class ResourceWidget(Static):
             f"""
 [bold cyan]💻 Resource[/bold cyan]
 
-CPU
+🖥 CPU
 
 {self.bar(cpu)} {cpu}%
 
 {info["cpu"]}
 
-Memory
+💾 Memory
 
 {self.bar(mem)} {mem}%
 
 {info["memory"]}
 
-Disk
+🗄 Disk
 
 {self.bar(disk)} {disk}%
 
