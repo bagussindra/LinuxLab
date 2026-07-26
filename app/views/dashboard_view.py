@@ -3,6 +3,7 @@ from textual.widgets import Static
 from textual.containers import Vertical, Horizontal
 
 from controllers.ssh_controller import SSHController
+from controllers.settings_controller import SettingsController
 
 from widgets.system_widget import SystemWidget
 from widgets.resource_widget import ResourceWidget
@@ -13,15 +14,30 @@ class DashboardView(Static):
     def __init__(self):
         super().__init__()
 
+        self.settings = SettingsController()
         self.controller = SSHController()
 
     def on_mount(self):
 
         self.refresh_dashboard()
+        self.start_refresh_timer()
 
     def on_show(self):
 
         self.refresh_dashboard()
+
+    def start_refresh_timer(self):
+
+        interval = self.settings.get("refresh_interval")
+
+        if hasattr(self, "refresh_timer"):
+            self.refresh_timer.stop()
+
+        if interval > 0:
+            self.refresh_timer = self.set_interval(
+                interval,
+                self.refresh_dashboard,
+        )
 
     def refresh_dashboard(self):
 
