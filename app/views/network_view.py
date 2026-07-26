@@ -1,7 +1,11 @@
 from textual.app import ComposeResult
 from textual.widgets import Static
+from textual.containers import Horizontal
+
 
 from controllers.network_controller import NetworkController
+
+from widgets.interface_widget import InterfaceWidget
 from widgets.ping_widget import PingWidget
 
 
@@ -15,8 +19,12 @@ class NetworkView(Static):
     def compose(self) -> ComposeResult:
 
         self.ping = PingWidget()
+        self.interface = InterfaceWidget()
 
-        yield self.ping
+        with Horizontal():
+
+            yield self.interface
+            yield self.ping
 
     def on_mount(self):
 
@@ -25,5 +33,7 @@ class NetworkView(Static):
     def refresh_ping(self):
 
         data = self.controller.ping("8.8.8.8")
-
         self.ping.update_ping(data)
+
+        interfaces = self.controller.interfaces()
+        self.interface.update_interfaces(interfaces)

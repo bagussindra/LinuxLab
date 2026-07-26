@@ -28,7 +28,9 @@ class MainScreen(Screen):
     }
 
     SystemWidget,
-    ResourceWidget {
+    ResourceWidget,
+    PingWidget,
+    InterfaceWidget {
          width: 1fr;
 
     }
@@ -39,7 +41,9 @@ class MainScreen(Screen):
 
     SystemWidget,
     ResourceWidget,
-    NetworkWidget {
+    NetworkWidget,
+    PingWidget,
+    InterfaceWidget {
         border: round cyan;
         margin-bottom: 1;
         padding: 1;
