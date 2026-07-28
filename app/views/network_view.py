@@ -7,7 +7,7 @@ from controllers.network_controller import NetworkController
 
 from widgets.interface_widget import InterfaceWidget
 from widgets.ping_widget import PingWidget
-
+from widgets.route_widget import RouteWidget
 
 class NetworkView(Static):
 
@@ -20,11 +20,16 @@ class NetworkView(Static):
 
         self.ping = PingWidget()
         self.interface = InterfaceWidget()
+        self.routes = RouteWidget()
+
 
         with Horizontal():
 
             yield self.interface
             yield self.ping
+
+        yield self.routes
+
 
     def on_mount(self):
 
@@ -37,3 +42,7 @@ class NetworkView(Static):
 
         interfaces = self.controller.interfaces()
         self.interface.update_interfaces(interfaces)
+
+        routes = self.controller.routes()
+        self.routes.update_routes(routes)
+

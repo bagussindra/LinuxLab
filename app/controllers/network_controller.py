@@ -13,3 +13,7 @@ class NetworkController:
     def interfaces(self):
 
         return self.service.interfaces()
+
+    def routes(self):
+
+        return self.service.routes()

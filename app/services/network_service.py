@@ -53,3 +53,15 @@ class NetworkService:
             })
 
         return interfaces
+
+    def routes(self):
+
+        output = self.ssh.execute("ip route")
+
+        routes = []
+
+        for line in output.splitlines():
+
+            routes.append(line)
+
+        return routes
