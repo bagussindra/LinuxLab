@@ -59,23 +59,8 @@ class SSHView(Static):
 
             info = self.controller.connect(server)
 
-            self.update(
-                f"""
-[bold cyan]SSH Manager[/bold cyan]
+            self.render_connected(info)
 
-[bold green]● Connected[/bold green]
-
-Hostname : {info["hostname"]}
-OS       : {info["os"]}
-Kernel   : {info["kernel"]}
-CPU      : {info["cpu"]}
-Memory   : {info["memory"]}
-Disk     : {info["disk"]}
-IP       : {info["ip"]}
-Load     : {info["load"]}
-Uptime   : {info["uptime"]}
-"""
-            )
         except Exception as e:
 
             self.update(
@@ -85,6 +70,7 @@ Uptime   : {info["uptime"]}
 {e}
 """
             )
+
     def refresh_info(self):
 
         try:
@@ -93,31 +79,13 @@ Uptime   : {info["uptime"]}
 
             info = self.controller.connect(server)
 
-            self.update(
-                f"""
-[bold cyan]SSH Manager[/bold cyan]
-
-[bold green]● Connected[/bold green]
-
-Hostname : {info["hostname"]}
-OS       : {info["os"]}
-Kernel   : {info["kernel"]}
-CPU      : {info["cpu"]}
-Memory   : {info["memory"]}
-Disk     : {info["disk"]}
-IP       : {info["ip"]}
-Load     : {info["load"]}
-Uptime   : {info["uptime"]}
-
-{self.footer_text()}
-"""
-            )
+            self.render_connected(info)
 
         except Exception as e:
 
             self.update(
                 f"""
-[bold red]Refresh Failed[/bold red]
+[bold red]Connection Failed[/bold red]
 
 {e}
 """
@@ -137,3 +105,25 @@ Uptime   : {info["uptime"]}
             return "[dim]Refresh : Manual (R)[/dim]"
 
         return f"[dim]Auto Refresh : {interval}s[/dim]"
+
+    def render_connected(self, info):
+
+        self.update(
+            f"""
+[bold cyan]SSH Manager[/bold cyan]
+
+[bold green]● Connected[/bold green]
+
+Hostname : {info["hostname"]}
+OS       : {info["os"]}
+Kernel   : {info["kernel"]}
+CPU      : {info["cpu"]}
+Memory   : {info["memory"]}
+Disk     : {info["disk"]}
+IP       : {info["ip"]}
+Load     : {info["load"]}
+Uptime   : {info["uptime"]}
+
+{self.footer_text()}
+"""
+            )
