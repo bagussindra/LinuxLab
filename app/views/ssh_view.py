@@ -1,9 +1,9 @@
 from textual.reactive import reactive
 from textual.widgets import Static
 
-from config.servers import SERVERS
 from controllers.ssh_controller import SSHController
 from controllers.settings_controller import SettingsController
+from services.server_service import ServerService
 
 class SSHView(Static):
 
@@ -18,7 +18,7 @@ class SSHView(Static):
 
         text += "[bold]Servers[/bold]\n\n"
 
-        for i, server in enumerate(SERVERS):
+        for i, server in enumerate(self.servers):
 
             if i == self.selected:
                 text += f"▶ {server['name']}\n"
@@ -31,25 +31,29 @@ class SSHView(Static):
 
     def cursor_up(self):
 
-        self.selected = (self.selected - 1) % len(SERVERS)
+        self.selected = (self.selected - 1) % len(self.servers)
 
         self.render_servers()
 
     def cursor_down(self):
 
-        self.selected = (self.selected + 1) % len(SERVERS)
+        self.selected = (self.selected + 1) % len(self.servers)
 
         self.render_servers()
 
     @property
     def current(self):
-        return SERVERS[self.selected]
+        return self.servers[self.selected]
 
     def __init__(self):
         super().__init__()
 
         self.controller = SSHController()
         self.settings = SettingsController()
+
+        self.server_service = ServerService()
+        self.servers = self.server_service.load()
+
 
     def connect(self):
 
@@ -97,6 +101,7 @@ class SSHView(Static):
 
         self.render_servers()
 
+
     def footer_text(self):
 
         interval = self.settings.get("refresh_interval")
@@ -126,4 +131,4 @@ Uptime   : {info["uptime"]}
 
 {self.footer_text()}
 """
-            )
+        )

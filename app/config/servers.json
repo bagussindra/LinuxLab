@@ -1,0 +1,9 @@
+[
+    {
+        "name": "Ubuntu Lab",
+        "host": "103.179.66.63",
+        "user": "root",
+        "password": "Gaspol@12345",
+        "port": 22
+    }
+]
