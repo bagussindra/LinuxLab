@@ -5,5 +5,12 @@
         "user": "root",
         "password": "Gaspol@12345",
         "port": 22
+    },
+    {
+        "name": "Debian Test",
+        "host": "",
+        "user": "",
+        "password": "",
+        "port": 22
     }
 ]

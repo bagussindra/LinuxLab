@@ -5,6 +5,8 @@ from textual.widgets import Header, Footer, Static
 from textual.binding import Binding
 from views.view_manager import ViewManager
 
+from modals.add_server_modal import AddServerModal
+
 
 from widgets.sidebar import Sidebar
 
@@ -58,6 +60,9 @@ class MainScreen(Screen):
         Binding("enter", "select", "Select"),
         Binding("r", "refresh", "Refresh"),
         Binding("escape", "disconnect", "Disconnect"),
+        Binding("a", "add_server", "Add"),
+        Binding("d", "delete_server", "Delete"),
+
     ]
 
     focus = "sidebar"
@@ -234,3 +239,14 @@ class MainScreen(Screen):
         ssh.disconnect()
 
         self.focus = "sidebar"
+
+    def action_add_server(self):
+
+        self.app.push_screen(
+            AddServerModal()
+        )
+
+
+    def action_delete_server(self):
+
+        self.notify("Delete Server (Coming Soon)")
