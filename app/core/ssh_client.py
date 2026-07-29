@@ -5,6 +5,7 @@ class SSHClient:
 
     def __init__(self):
         self.client = None
+        self.shell = None
 
     def connect(self, host, username, password, port=22):
 
@@ -21,6 +22,7 @@ class SSHClient:
             port=port,
             timeout=5
         )
+        self.shell = self.client.invoke_shell()
 
     def execute(self, command):
 

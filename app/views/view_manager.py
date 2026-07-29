@@ -4,6 +4,7 @@ from views.dashboard_view import DashboardView
 from views.monitoring_view import MonitoringView
 from views.network_view import NetworkView
 from views.ssh_view import SSHView
+from views.terminal_view import TerminalView
 from views.docker_view import DockerView
 from views.settings_view import SettingsView
 
@@ -15,6 +16,7 @@ class ViewManager(Container):
         "Monitoring": MonitoringView,
         "Network": NetworkView,
         "SSH Manager": SSHView,
+        "Terminal": TerminalView,
         "Docker": DockerView,
         "Settings": SettingsView,
     }
