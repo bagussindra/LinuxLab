@@ -1,16 +1,16 @@
 [
     {
         "name": "Ubuntu Lab",
-        "host": "103.179.66.63",
+        "host": "103.179.66.100",
         "user": "root",
         "password": "Gaspol@12345",
         "port": 22
     },
     {
         "name": "Debian Test",
-        "host": "",
-        "user": "",
-        "password": "",
+        "host": "192.168.1.10",
+        "user": "root",
+        "password": "rahasia",
         "port": 22
     }
 ]

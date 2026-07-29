@@ -61,6 +61,7 @@ class MainScreen(Screen):
         Binding("r", "refresh", "Refresh"),
         Binding("escape", "disconnect", "Disconnect"),
         Binding("a", "add_server", "Add"),
+        Binding("e", "edit_server", "Edit"),
         Binding("d", "delete_server", "Delete"),
 
     ]
@@ -250,3 +251,21 @@ class MainScreen(Screen):
     def action_delete_server(self):
 
         self.notify("Delete Server (Coming Soon)")
+
+    def action_edit_server(self):
+
+        menu = self.query_one(Sidebar).current
+
+        if menu != "SSH Manager":
+            return
+
+        from views.ssh_view import SSHView
+
+        ssh = self.view.query_one(SSHView)
+
+        self.app.push_screen(
+            AddServerModal(
+                server=ssh.current,
+                index=ssh.selected
+            )
+        )
