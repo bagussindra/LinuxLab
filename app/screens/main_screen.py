@@ -6,7 +6,7 @@ from textual.binding import Binding
 from views.view_manager import ViewManager
 
 from modals.add_server_modal import AddServerModal
-
+from modals.delete_server_modal import DeleteServerModal
 
 from widgets.sidebar import Sidebar
 
@@ -250,7 +250,22 @@ class MainScreen(Screen):
 
     def action_delete_server(self):
 
-        self.notify("Delete Server (Coming Soon)")
+        menu = self.query_one(Sidebar).current
+
+        if menu != "SSH Manager":
+            return
+
+        from views.ssh_view import SSHView
+
+        ssh = self.view.query_one(SSHView)
+
+        self.app.push_screen(
+            DeleteServerModal(
+                server=ssh.current,
+                index=ssh.selected
+            ),
+            self.after_delete
+        )
 
     def action_edit_server(self):
 
@@ -269,3 +284,8 @@ class MainScreen(Screen):
                 index=ssh.selected
             )
         )
+
+    def after_delete(self, deleted):
+
+        if deleted:
+            self.refresh_content()
